@@ -46,4 +46,3 @@ Then for each file (including those matched above):
 Look at the "patch" value
 check to see if it contains one of '/dev/null', 'raise', '.write', '%x', 'exec'.  If it does, add the appropriate "Interesting: (file) found (interesting bit)"
 
-?access_token=79535c0b2d10678661791cc133d364908f928142
