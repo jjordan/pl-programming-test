@@ -1,0 +1,22 @@
+Components:
+
+Account - puppetlabs or jjordan
+Project Repo - puppet, facter, etc
+Pull Request - output goal
+Change - file details and patch information
+Match - criteria for selecting a Change as interesting, and subsequently the Pull Request
+
+Responsibilities:
+
+Match - know when it matched, and whether that means "interesting" or "not interesting"
+Change - know how to format itself
+Pull Request - know whether it is interesting, and how to format itself, and how to make an API URL
+Project Repo - know how to generate an API URL and Output URL
+Account - know it's account name and access token
+
+Composition:
+
+Account - contains zero or many Project Repos
+Project Repo - contains zero or more Pull Requests
+Pull Request - contains zero or more Changes
+
