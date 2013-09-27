@@ -1,0 +1,18 @@
+Get a list of all of the pulls:
+curl "https://api.github.com/repos/puppetlabs/puppet/pulls"
+Check for open pull requests in the JSON returned:
+    "state": "open",
+
+From those open requests, get the pull request files:
+
+GET /repos/:owner/:repo/pulls/:number/files
+curl "https://api.github.com/repos/puppetlabs/puppet/pulls/1522/files"
+
+Check the "filename" value to see if it contains the "spec/" directory.  If not, add the "Interesting: no spec change" flag to the output.
+Check the "filename" value to see if it contains "Gemfile" or ".gemspec".  If it does, add the appropriate "Interesting: Gemfile" flag to the output.
+
+Then for each file (including those matched above):
+Look at the "patch" value
+check to see if it contains one of '/dev/null', 'raise', '.write', '%x', 'exec'.  If it does, add the appropriate "Interesting: (file) found (interesting bit)"
+
+
