@@ -1,0 +1,8 @@
+ * Create the PullRequest class
+ * Create the Change class
+ * Create the 'fetcher' class
+ * Find a better name than 'fetcher'
+ * Create the 'criteria' class
+ * Create the 'criterion' class (if needed)
+
+
