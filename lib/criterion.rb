@@ -1,5 +1,5 @@
 module PreReviewer
-  class Criteria
+  class Criterion
     attr_reader :specifier, :field, :meaning, :match
     def initialize( input )
       @specifier = input[:specifier]

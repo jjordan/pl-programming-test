@@ -1,10 +1,10 @@
-# prereviewer::criteria
+# prereviewer::criterion
 
-require 'criteria'
+require 'criterion'
 
-describe PreReviewer::Criteria, "initialize" do
+describe PreReviewer::Criterion, "initialize" do
   it "knows what its fields are" do    
-    criterion = PreReviewer::Criteria.new({:specifier => :all, :field => :filename, :meaning => :interesting, :match => 'spec'})
+    criterion = PreReviewer::Criterion.new({:specifier => :all, :field => :filename, :meaning => :interesting, :match => 'spec'})
     criterion.specifier.should == :all
     criterion.field.should == :filename
     criterion.meaning.should == :interesting
@@ -13,7 +13,7 @@ describe PreReviewer::Criteria, "initialize" do
 
 end
 
-describe PreReviewer::Criteria, "apply" do
+describe PreReviewer::Criterion, "apply" do
 
   it "can find any matches in the filename" do 
     pull_request = double("pull request")
@@ -22,7 +22,7 @@ describe PreReviewer::Criteria, "apply" do
     pull_request.should_receive( :changes ).and_return( [change, change2] )
     change.should_receive(:filename).and_return('Gemfile')
     change2.should_receive(:filename).and_return('Rakefile')
-    criterion = PreReviewer::Criteria.new({:specifier => :any, :field => :filename, :meaning => :interesting, :match => 'Gemfile'})
+    criterion = PreReviewer::Criterion.new({:specifier => :any, :field => :filename, :meaning => :interesting, :match => 'Gemfile'})
     criterion.apply( pull_request )
     criterion.applied?.should == true
   end
@@ -37,7 +37,7 @@ describe PreReviewer::Criteria, "apply" do
 EOS
 )
     change2.should_receive(:patch).and_return('@@ -187,3 + 187,3 @@\n+haptic baloney dancers\n+are nice\n+at twice the prie.\n')
-    criterion = PreReviewer::Criteria.new({:specifier => :any, :field => :patch, :meaning => :interesting, :match => '%x'})
+    criterion = PreReviewer::Criterion.new({:specifier => :any, :field => :patch, :meaning => :interesting, :match => '%x'})
     criterion.apply( pull_request )
     criterion.applied?.should == true
   end
@@ -49,7 +49,7 @@ EOS
     pull_request.should_receive( :changes ).and_return( [change, change2] )
     change.should_receive(:filename).and_return('Gemfile')
     change2.should_receive(:filename).and_return('Rakefile')
-    criterion = PreReviewer::Criteria.new({:specifier => :all, :field => :filename, :meaning => :interesting, :match => 'Gemfile'})
+    criterion = PreReviewer::Criterion.new({:specifier => :all, :field => :filename, :meaning => :interesting, :match => 'Gemfile'})
     criterion.apply( pull_request )
     criterion.applied?.should == false
 
@@ -60,7 +60,7 @@ EOS
     pull_request.should_receive( :changes ).and_return( [change, change2] )
     change.should_receive(:filename).and_return('Gemfile')
     change2.should_receive(:filename).and_return('Gemfile')
-    criterion = PreReviewer::Criteria.new({:specifier => :all, :field => :filename, :meaning => :interesting, :match => 'Gemfile'})
+    criterion = PreReviewer::Criterion.new({:specifier => :all, :field => :filename, :meaning => :interesting, :match => 'Gemfile'})
     criterion.apply( pull_request )
     criterion.applied?.should == true
   end
@@ -75,7 +75,7 @@ EOS
 EOS
 )
     change2.should_receive(:patch).and_return('@@ -187,3 + 187,3 @@\n+haptic baloney dancers\n+are nice\n+at twice the prie.\n')
-    criterion = PreReviewer::Criteria.new({:specifier => :all, :field => :patch, :meaning => :interesting, :match => '%x'})
+    criterion = PreReviewer::Criterion.new({:specifier => :all, :field => :patch, :meaning => :interesting, :match => '%x'})
     criterion.apply( pull_request )
     criterion.applied?.should == false
 
@@ -89,7 +89,7 @@ EOS
 EOS
 )
     change2.should_receive(:patch).and_return('@@ -187,3 + 187,3 @@\n+haptic baloney dancers\n+are nice\n+at twice the price %x.\n')
-    criterion = PreReviewer::Criteria.new({:specifier => :all, :field => :patch, :meaning => :interesting, :match => '%x'})
+    criterion = PreReviewer::Criterion.new({:specifier => :all, :field => :patch, :meaning => :interesting, :match => '%x'})
     criterion.apply( pull_request )
     criterion.applied?.should == true
   end
@@ -101,7 +101,7 @@ EOS
     pull_request.should_receive( :changes ).and_return( [change, change2] )
     change.should_receive(:filename).and_return('.gemspec')
     change2.should_receive(:filename).and_return('Rakefile')
-    criterion = PreReviewer::Criteria.new({:specifier => :none, :field => :filename, :meaning => :interesting, :match => 'Gemfile'})
+    criterion = PreReviewer::Criterion.new({:specifier => :none, :field => :filename, :meaning => :interesting, :match => 'Gemfile'})
     criterion.apply( pull_request )
     criterion.applied?.should == true
 
@@ -112,7 +112,7 @@ EOS
     pull_request.should_receive( :changes ).and_return( [change, change2] )
     change.should_receive(:filename).and_return('Gemfile')
     change2.should_receive(:filename).and_return('Rakefile')
-    criterion = PreReviewer::Criteria.new({:specifier => :none, :field => :filename, :meaning => :interesting, :match => 'Gemfile'})
+    criterion = PreReviewer::Criterion.new({:specifier => :none, :field => :filename, :meaning => :interesting, :match => 'Gemfile'})
     criterion.apply( pull_request )
     criterion.applied?.should == false
 
@@ -128,7 +128,7 @@ EOS
 EOS
 )
     change2.should_receive(:patch).and_return('@@ -187,3 + 187,3 @@\n+haptic baloney dancers\n+are nice\n+at twice the prie.\n')
-    criterion = PreReviewer::Criteria.new({:specifier => :none, :field => :patch, :meaning => :interesting, :match => '%x'})
+    criterion = PreReviewer::Criterion.new({:specifier => :none, :field => :patch, :meaning => :interesting, :match => '%x'})
     criterion.apply( pull_request )
     criterion.applied?.should == false
 
@@ -142,7 +142,7 @@ EOS
 EOS
 )
     change2.should_receive(:patch).and_return('@@ -187,3 + 187,3 @@\n+haptic baloney dancers\n+are nice\n+at twice the prie.\n')
-    criterion = PreReviewer::Criteria.new({:specifier => :none, :field => :patch, :meaning => :interesting, :match => '%x'})
+    criterion = PreReviewer::Criterion.new({:specifier => :none, :field => :patch, :meaning => :interesting, :match => '%x'})
     criterion.apply( pull_request )
     criterion.applied?.should == true
     criterion.matched?.should == true
