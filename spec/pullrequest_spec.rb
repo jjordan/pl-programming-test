@@ -17,7 +17,7 @@ describe PreReviewer::PullRequest, "new_from_hash" do
 
 end
 
-describe PreReviewer::PullRequest, "fetch_changes" do
+describe PreReviewer::PullRequest, "changes" do
   it "returns a set of change objects" do
     config = double("config")
     request = double("request")
@@ -31,7 +31,7 @@ describe PreReviewer::PullRequest, "fetch_changes" do
     pull = PreReviewer::PullRequest.new_from_hash( config, request, {"number" => 1522} )
     change = double("change")
     PreReviewer::Change.should_receive( :new_from_hash ).with( {} ).and_return( change )
-    changes = pull.fetch_changes
+    changes = pull.changes
     pull.is_interesting?.should == true
     pull.is_interesting = false
     pull.is_interesting?.should == false

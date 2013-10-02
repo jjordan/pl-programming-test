@@ -76,7 +76,7 @@ render - render output
 Criteria
 ----------------------------------------
 specifier - all/any/none
-component - change/pull request
+#component - change/pull request# redundant with specifier
 field - filename/patch
 match - /\bexec\b/i
 meaning - interesting/uninteresting

@@ -14,6 +14,7 @@ module PreReviewer
       @name = request.name
       @number = input["number"]
       @interesting = true
+      @changes = []
     end
 
     def is_interesting?
@@ -24,15 +25,16 @@ module PreReviewer
       @interesting = interesting
     end
 
-    def fetch_changes
-      fetcher = @config.fetcher
-      api_url = @config.change_api( @account, @name, @number )
-      changes = fetcher.get( api_url )
-      ch = []
-      changes.each do |change|
-        ch << PreReviewer::Change.new_from_hash( change )
+    def changes
+      if(@changes.empty?)
+        fetcher = @config.fetcher
+        api_url = @config.change_api( @account, @name, @number )
+        changes = fetcher.get( api_url )
+        changes.each do |change|
+          @changes << PreReviewer::Change.new_from_hash( change )
+        end
       end
-      ch
+      @changes
     end
 
     def render
