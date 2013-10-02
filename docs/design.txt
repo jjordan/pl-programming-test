@@ -1,22 +1,87 @@
 Components:
-
-Account - puppetlabs or jjordan
+-----------
 Project Repo - puppet, facter, etc
 Pull Request - output goal
 Change - file details and patch information
-Match - criteria for selecting a Change as interesting, and subsequently the Pull Request
+Criteria - logic for selecting a Change as interesting, and subsequently the Pull Request
+PreReviewer - get the command-line arguments, config file arguments, execute main program, return details to user
 
 Responsibilities:
-
-Match - know when it matched, and whether that means "interesting" or "not interesting"
+-----------------
+Match - know when it matched
+Criteria - know the context and subsequently whether it's matcher's status mean "interesting" or "not interesting"
 Change - know how to format itself
 Pull Request - know whether it is interesting, and how to format itself, and how to make an API URL
-Project Repo - know how to generate an API URL and Output URL
-Account - know it's account name and access token
+Project Repo - know how to generate an API URL and Output URL, know it's account name
+PreReviewer - know how to get command-line arguments, determines how to run, outputs rendered content
 
 Composition:
-
-Account - contains zero or many Project Repos
+------------
 Project Repo - contains zero or more Pull Requests
 Pull Request - contains zero or more Changes
+
+Details:
+--------
+
+========================================
+PreReviewer
+----------------------------------------
+access_token - the optional access token
+----------------------------------------
+_get_commandline_config
+_get_configfile_config
+_initialize_repo
+_fetch_matchers_and_criteria
+run()
+========================================
+
+
+========================================
+Project Repo
+----------------------------------------
+name - puppet
+account - puppetlabs
+----------------------------------------
+fetch_pulls(state) - get all pulls with a given state (default is 'open')
+========================================
+
+
+========================================
+Pull Request
+----------------------------------------
+number - 1931
+state - open
+html_url - https://github.com/blah
+api_url - https://api.github.com/blah/blah/blah
+changes - array of Change objects
+meaning - interesting, uninteresting
+----------------------------------------
+fetch_changes() - populate self with change objects
+render(Criteria) - render with interesting status
+========================================
+
+
+========================================
+Change
+----------------------------------------
+filename - spec/foo_spec.rb
+status - modified
+patch - @@ +blah blah \n- blaugh blaugh\n
+----------------------------------------
+render - render output
+========================================
+
+
+========================================
+Criteria
+----------------------------------------
+specifier - all/any/none
+component - change/pull request
+field - filename/patch
+match - /\bexec\b/i
+meaning - interesting/uninteresting
+----------------------------------------
+_select(Pull Request) - using the specifier, component and field, return a list of items to apply the match to.
+apply(Pull Request) - Meaning
+========================================
 
