@@ -11,7 +11,7 @@
 require 'configurability'
 require 'pathname'
 require 'request'
-require 'project_repo'
+require 'repository'
 require 'criteria'
 
 BASEPATH = Pathname(__FILE__).parent.dirname.realpath
@@ -27,7 +27,7 @@ module PreReviewer
       args = ARGV.dup
       @config = initialize_config( args )
       @request = PreReviewer::Request.new( args )
-      @repo = PreReviewer::ProjectRepo.new( @request ) # need to take out config dependency here, since I want to use configurability now
+      @repo = PreReviewer::Repository.new( @request ) # need to take out config dependency here, since I want to use configurability now
       @criteria = PreReviewer::Criteria.new( @config )
     end
 

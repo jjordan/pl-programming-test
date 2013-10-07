@@ -1,8 +1,13 @@
- * Create the PullRequest class
- * Create the Change class
- * Create the 'fetcher' class
- * Find a better name than 'fetcher'
- * Create the 'criteria' class
- * Create the 'criterion' class (if needed)
+ * Finish Criteria class (composition of Criterion objects)
+ * Finish Request class
 
+ * Integrate configurability into my code
+ * Finish the code and test that it all works together.
+
+ * Integrate loggability into my code
+ * Set up project fundamentals with hoe
+ * Add a rakefile (if hoe doesn't do that)
+ * Install rcov and make sure my code is 100% covered
+ * Make sure that my code is 100% documented
+ * Go back through and refactor anything that looks ugly
 
