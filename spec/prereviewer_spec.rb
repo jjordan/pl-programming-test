@@ -3,13 +3,17 @@
 require 'prereviewer'
 require 'fileutils'
 require 'pathname'
+require 'httparty'
 #require 'fakefs'
 HOMEDIR = Pathname.new('/tmp/user/')
 BASE_PATH = Pathname(__FILE__).parent.dirname.realpath
 
 describe PreReviewer::Main, "initialize" do
+  # todo: either get this working with fakefs or
+  # use tempfile so that the files won't clobber each other
+  # if run concurrently
   before(:all) do
-    FileUtils.mkdir_p( HOMEDIR )    
+    FileUtils.mkdir_p( HOMEDIR )
   end
 
   after(:all) do
@@ -34,7 +38,7 @@ describe PreReviewer::Main, "initialize" do
     Configurability.should_receive( :configure_objects ).with( :config )
 
     PreReviewer::Request.should_receive(:new).with(args).and_return( :request )
-    PreReviewer::ProjectRepo.should_receive(:new).with( :config, :request )
+    PreReviewer::ProjectRepo.should_receive(:new).with( :request )
     PreReviewer::Criteria.should_receive(:new).with(:config)
     PreReviewer::Main.new
   end
@@ -49,7 +53,7 @@ describe PreReviewer::Main, "initialize" do
     Configurability.should_receive( :configure_objects ).with( :config )
 
     PreReviewer::Request.stub(:new).with(args).and_return( :request )
-    PreReviewer::ProjectRepo.stub(:new).with( :config, :request )
+    PreReviewer::ProjectRepo.stub(:new).with( :request )
     PreReviewer::Criteria.stub(:new).with(:config)
 
     PreReviewer::Main.new
@@ -65,7 +69,7 @@ describe PreReviewer::Main, "initialize" do
     Configurability.should_receive( :configure_objects ).with( :config )
 
     PreReviewer::Request.stub(:new).with(args).and_return( :request )
-    PreReviewer::ProjectRepo.stub(:new).with( :config, :request )
+    PreReviewer::ProjectRepo.stub(:new).with( :request )
     PreReviewer::Criteria.stub(:new).with(:config)
 
     PreReviewer::Main.new
@@ -86,7 +90,7 @@ describe PreReviewer::Main, "run" do
     criterion1 = double("criterion 1")
     criterion2 = double("criterion 2")
     PreReviewer::Request.stub(:new).with(args).and_return( :request )
-    PreReviewer::ProjectRepo.stub(:new).with( :config, :request ).and_return( repo )
+    PreReviewer::ProjectRepo.stub(:new).with( :request ).and_return( repo )
     PreReviewer::Criteria.stub(:new).with(:config).and_return([criterion1, criterion2])
     pr = PreReviewer::Main.new
     pull1 = double("pull 1")

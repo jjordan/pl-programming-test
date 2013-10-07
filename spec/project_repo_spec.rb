@@ -5,17 +5,18 @@ require 'pullrequest'
 require 'httparty'
 require 'json'
 
-describe PreReviewer::ProjectRepo, "fetching pulls" do
+describe PreReviewer::ProjectRepo, "initialization" do
   it "knows it's name and account" do
     request = double("request")
-    config = double("config")
     request.should_receive( :account ).and_return('puppetlabs')
     request.should_receive( :repo ).and_return('puppet')
-    pr = PreReviewer::ProjectRepo.new( config, request )
+    pr = PreReviewer::ProjectRepo.new( request )
     pr.name.should eq("puppet")
     pr.account.should eq("puppetlabs")
   end
+end
 
+describe PreReviewer::ProjectRepo, "pulls" do
   it "can fetch all pulls with a default state" do
     request = double("request")
     config = double("config")
@@ -26,7 +27,9 @@ describe PreReviewer::ProjectRepo, "fetching pulls" do
     config.should_receive(:pull_api).with( 'puppetlabs', 'puppet' ).and_return( :api_url )
     request.stub( :account ).and_return('puppetlabs')
     request.stub( :repo ).and_return('puppet')
-    pr = PreReviewer::ProjectRepo.new( config, request )
+    pr = PreReviewer::ProjectRepo.new( request )
+    # simulate configurability:
+    pr.config = config
     pull_data = [{"state" => 'open'}, {"state" => 'closed'}]
     fetcher.should_receive( :get ).with( :api_url ).and_return(pull_data)
     pull_object.should_receive(:state).and_return( 'open' )
@@ -44,7 +47,7 @@ describe PreReviewer::ProjectRepo, "fetching pulls" do
    #  fetcher = double("fetcher")
    #  request.stub( :account ).and_return('puppetlabs')
    #  request.stub( :repo ).and_return('puppet')
-   #  pr = PreReviewer::ProjectRepo.new( config, request )
+   #  pr = PreReviewer::ProjectRepo.new( request )
    #  config.stub(:fetcher).and_return( fetcher )
    #  pulls = [{"state" => 'open'}, {"state" => 'closed'}]
    #  pull_object = double( "pull request" )

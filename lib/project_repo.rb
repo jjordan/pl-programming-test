@@ -1,12 +1,14 @@
+require 'configurability'
+
 module PreReviewer
   class ProjectRepo
+    extend Configurability
     attr_reader :name, :account, :pulls, :selected_pulls
-    attr_accessor :pull_state
-    def initialize( config, request )
+    attr_accessor :pull_state, :config
+    def initialize( request )
       @account = request.account
       @name = request.repo
       @pull_state = 'open'
-      @config = config
       @pulls = []
     end
 
@@ -26,6 +28,5 @@ module PreReviewer
       end
     end
   end
-
 
 end

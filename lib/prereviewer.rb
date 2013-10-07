@@ -27,7 +27,7 @@ module PreReviewer
       args = ARGV.dup
       @config = initialize_config( args )
       @request = PreReviewer::Request.new( args )
-      @repo = PreReviewer::ProjectRepo.new( @config, @request ) # need to take out config dependency here, since I want to use configurability now
+      @repo = PreReviewer::ProjectRepo.new( @request ) # need to take out config dependency here, since I want to use configurability now
       @criteria = PreReviewer::Criteria.new( @config )
     end
 
