@@ -34,7 +34,7 @@ describe PreReviewer::ProjectRepo, "fetching pulls" do
     PreReviewer::PullRequest.should_receive( :new_from_hash ).with( pull_data[0] ).and_return( pull_object )
     PreReviewer::PullRequest.should_receive( :new_from_hash ).with( pull_data[1] ).and_return( pull_object2 )
 
-    pulls = pr.fetch_pulls # default state is 'open'
+    pulls = pr.pulls # default state is 'open'
     pulls.should eq([pull_object])
   end
 
@@ -56,7 +56,7 @@ describe PreReviewer::ProjectRepo, "fetching pulls" do
    #  fetcher.stub( :get ).and_return(pulls)
  
    # pr.pull_state = nil
-   #  pulls = pr.fetch_pulls # default state is 'open'
+   #  pulls = pr.pulls # default state is 'open'
    #  pulls.should eq([pull_object, pull_object2])
   end
 

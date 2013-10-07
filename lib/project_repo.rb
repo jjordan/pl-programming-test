@@ -10,7 +10,7 @@ module PreReviewer
       @pulls = []
     end
 
-    def fetch_pulls
+    def pulls
       fetcher = @config.fetcher
       api_url = @config.pull_api( @account, @name )
       pulls = fetcher.get( api_url )

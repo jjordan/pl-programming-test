@@ -73,3 +73,33 @@ describe PreReviewer::Main, "initialize" do
 
 end
 
+describe PreReviewer::Main, "run" do
+  it "applies criteria to each pull" do
+    expected_path = BASE_PATH + 'default/config.yml'
+    args = ['puppetlabs/puppet']
+    ARGV.stub( :dup ).and_return(args)
+    ENV.stub(:[]).with('HOME').and_return(HOMEDIR)
+    Configurability::Config.stub( :load ).with( expected_path ).and_return( :config )
+    Configurability.stub( :configure_objects ).with( :config )
+
+    repo = double("repo")
+    criterion1 = double("criterion 1")
+    criterion2 = double("criterion 2")
+    PreReviewer::Request.stub(:new).with(args).and_return( :request )
+    PreReviewer::ProjectRepo.stub(:new).with( :config, :request ).and_return( repo )
+    PreReviewer::Criteria.stub(:new).with(:config).and_return([criterion1, criterion2])
+    pr = PreReviewer::Main.new
+    pull1 = double("pull 1")
+    pull2 = double("pull 2")
+
+    repo.should_receive(:pulls).and_return([pull1, pull2])
+    criterion1.should_receive(:apply).with( pull1 )
+    criterion1.should_receive(:apply).with( pull2 )
+    criterion2.should_receive(:apply).with( pull1 )
+    criterion2.should_receive(:apply).with( pull2 )
+
+    pull1.should_receive( :render )
+    pull2.should_receive( :render )
+    pr.run
+  end
+end

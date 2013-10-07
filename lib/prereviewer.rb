@@ -48,17 +48,17 @@ module PreReviewer
     end
 
     # This method runs the program based on defaults from the config
-    # def run
-    #   pulls = @repo.fetch_pulls
-    #   if(pulls)
-    #     pulls.each do |pull|
-    #       @criteria.each do |criterion|
-    #         criterion.apply(pull)
-    #       end
-    #       pull.render
-    #     end
-    #   end
-    # end
+    def run
+      pulls = @repo.pulls
+      if(pulls)
+        pulls.each do |pull|
+          @criteria.each do |criterion|
+            criterion.apply(pull)
+          end
+          pull.render
+        end
+      end
+    end
 
   end
 
