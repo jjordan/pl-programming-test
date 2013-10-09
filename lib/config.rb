@@ -40,9 +40,16 @@ module PreReviewer
       pull_url
     end
 
-#    def method_missing(method, *args, &block)  
-#      puts "There's no method called #{m} here -- please try again."  
-#    end 
+    def method_missing(method, *args, &block)  
+      if( self.class.config_data_exists? method )
+        self.class.send( :define_method, method.to_sym ) do
+          return self.get_config_data( method )
+        end
+      else
+        raise ConfigError, "No config section '#{method}'"
+      end
+      return self.send( method.to_sym )
+    end 
     protected
 
     # returns the value of the key as a string, symbol or from the default

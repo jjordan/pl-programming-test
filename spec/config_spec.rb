@@ -87,6 +87,24 @@ describe PreReviewer::Config, "pull_api" do
 end
 
 describe PreReviewer::Config, "method_missing" do
-  it "converts config sections into methods"
+  it "converts config sections into methods" do
+    new_config = CORRECT_CONFIG.dup
+    access_token = '1324098as7dl12k3'
+    new_config[:access_token] = access_token
+    YAML.stub(:load).with( :config_path ).and_return( new_config )
+    PreReviewer::Config.load( :config_path )
+    config = PreReviewer::Config.instance
+    config.access_token.should == access_token
+  end
+
+  it "raises a config error if the section doesn't exist" do
+    new_config = CORRECT_CONFIG.dup
+    YAML.stub(:load).with( :config_path ).and_return( new_config )
+    PreReviewer::Config.load( :config_path )
+    config = PreReviewer::Config.instance
+    expect {
+      config.minotaur #beware the previous spec defines access_token
+    }.to raise_error
+  end
 end
 
