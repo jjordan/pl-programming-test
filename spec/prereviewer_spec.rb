@@ -39,7 +39,7 @@ describe PreReviewer::Main, "initialize" do
 
     PreReviewer::Request.should_receive(:new).with(args).and_return( :request )
     PreReviewer::Repository.should_receive(:new).with( :request )
-    PreReviewer::Criteria.should_receive(:new).with(:config)
+    PreReviewer::Criteria.should_receive(:new)
     PreReviewer::Main.new
   end
 
@@ -54,7 +54,7 @@ describe PreReviewer::Main, "initialize" do
 
     PreReviewer::Request.stub(:new).with(args).and_return( :request )
     PreReviewer::Repository.stub(:new).with( :request )
-    PreReviewer::Criteria.stub(:new).with(:config)
+    PreReviewer::Criteria.stub(:new)
 
     PreReviewer::Main.new
   end
@@ -70,7 +70,7 @@ describe PreReviewer::Main, "initialize" do
 
     PreReviewer::Request.stub(:new).with(args).and_return( :request )
     PreReviewer::Repository.stub(:new).with( :request )
-    PreReviewer::Criteria.stub(:new).with(:config)
+    PreReviewer::Criteria.stub(:new)
 
     PreReviewer::Main.new
   end
@@ -91,7 +91,7 @@ describe PreReviewer::Main, "run" do
     criterion2 = double("criterion 2")
     PreReviewer::Request.stub(:new).with(args).and_return( :request )
     PreReviewer::Repository.stub(:new).with( :request ).and_return( repo )
-    PreReviewer::Criteria.stub(:new).with(:config).and_return([criterion1, criterion2])
+    PreReviewer::Criteria.stub(:new).and_return([criterion1, criterion2])
     pr = PreReviewer::Main.new
     pull1 = double("pull 1")
     pull2 = double("pull 2")

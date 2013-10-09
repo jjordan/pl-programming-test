@@ -25,10 +25,11 @@ module PreReviewer
     # This method initializes the program
     def initialize
       args = ARGV.dup
-      @config = initialize_config( args )
       @request = PreReviewer::Request.new( args )
-      @repo = PreReviewer::Repository.new( @request ) # need to take out config dependency here, since I want to use configurability now
-      @criteria = PreReviewer::Criteria.new( @config )
+      @repo = PreReviewer::Repository.new( @request )
+      @criteria = PreReviewer::Criteria.new
+      # initialize this last, since it's callback configures all the above
+      @config = initialize_config( args )
     end
 
     # This method creates the config object
