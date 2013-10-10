@@ -1,14 +1,13 @@
+require 'config'
+require 'change'
 require 'json'
 
 module PreReviewer
   class PullRequest 
     attr_reader :account, :name, :number
-    def self.new_from_hash(config, request, input )
-      self.new( config, request, input )
-    end
 
-    def initialize( config, request, input )
-      @config = config
+    def initialize( request, input )
+      @config = PreReviewer::Config.instance
       @request = request
       @account = request.account
       @name = request.name
@@ -31,7 +30,7 @@ module PreReviewer
         api_url = @config.change_api( @account, @name, @number )
         changes = fetcher.get( api_url )
         changes.each do |change|
-          @changes << PreReviewer::Change.new_from_hash( change )
+          @changes << PreReviewer::Change.new( change )
         end
       end
       @changes

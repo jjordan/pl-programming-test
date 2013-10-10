@@ -1,8 +1,10 @@
 # PreReviewer project repo spec
 
+require 'config'
+require 'fetcher'
 require 'repository'
 require 'pullrequest'
-require 'httparty'
+#require 'httparty'
 require 'json'
 
 describe PreReviewer::Repository, "initialization" do
@@ -23,44 +25,45 @@ describe PreReviewer::Repository, "pulls" do
     fetcher = double("fetcher")
     pull_object = double( "pull request" )
     pull_object2 = double( "pull request2" )
-    config.should_receive(:fetcher).and_return( fetcher )
+    PreReviewer::Fetcher.should_receive(:new).and_return( fetcher )
+    PreReviewer::Config.should_receive(:instance).and_return( config )
     config.should_receive(:pull_api).with( 'puppetlabs', 'puppet' ).and_return( :api_url )
     request.stub( :account ).and_return('puppetlabs')
     request.stub( :repo ).and_return('puppet')
     pr = PreReviewer::Repository.new( request )
-    # simulate configurability:
-    pr.config = config
     pull_data = [{"state" => 'open'}, {"state" => 'closed'}]
-    fetcher.should_receive( :get ).with( :api_url ).and_return(pull_data)
+    fetcher.should_receive( :fetch ).with( :api_url ).and_return(pull_data)
     pull_object.should_receive(:state).and_return( 'open' )
     pull_object2.should_receive(:state).and_return( 'closed' )
-    PreReviewer::PullRequest.should_receive( :new_from_hash ).with( pull_data[0] ).and_return( pull_object )
-    PreReviewer::PullRequest.should_receive( :new_from_hash ).with( pull_data[1] ).and_return( pull_object2 )
+    PreReviewer::PullRequest.should_receive( :new ).with( request, pull_data[0] ).and_return( pull_object )
+    PreReviewer::PullRequest.should_receive( :new ).with( request, pull_data[1] ).and_return( pull_object2 )
 
     pulls = pr.pulls # default state is 'open'
     pulls.should eq([pull_object])
   end
 
   it "if pull state is nil, returns all pulls" do
-   #  request = double("request")
-   #  config = double("config")
-   #  fetcher = double("fetcher")
-   #  request.stub( :account ).and_return('puppetlabs')
-   #  request.stub( :repo ).and_return('puppet')
-   #  pr = PreReviewer::Repository.new( request )
-   #  config.stub(:fetcher).and_return( fetcher )
-   #  pulls = [{"state" => 'open'}, {"state" => 'closed'}]
-   #  pull_object = double( "pull request" )
-   #  pull_object2 = double( "closed pull" )
-   #  PreReviewer::PullRequest.stub( :load_from_json ).and_return( [pull_object, pull_object2] )
-   #  pull_object.stub(:state).and_return( 'open' )
-   #  pull_object2.stub(:state).and_return( 'closed' )
-   #  config.stub(:pull_api).and_return( :api_url )
-   #  fetcher.stub( :get ).and_return(pulls)
+    request = double("request")
+    config = double("config")
+    fetcher = double("fetcher")
+    request.stub( :account ).and_return('puppetlabs')
+    request.stub( :repo ).and_return('puppet')
+    PreReviewer::Fetcher.should_receive(:new).and_return( fetcher )
+    PreReviewer::Config.should_receive(:instance).and_return( config )
+    pr = PreReviewer::Repository.new( request )
+    pulls = [{"state" => 'open'}, {"state" => 'closed'}]
+    pull_object = double( "pull request" )
+    pull_object2 = double( "closed pull" )
+    PreReviewer::PullRequest.stub( :new ).with( request, pulls[0]).and_return( pull_object )
+    PreReviewer::PullRequest.stub( :new ).with( request, pulls[1]).and_return( pull_object2 )
+    pull_object.stub(:state).and_return( 'open' )
+    pull_object2.stub(:state).and_return( 'closed' )
+    config.stub(:pull_api).and_return( :api_url )
+    fetcher.stub( :fetch ).and_return(pulls)
  
-   # pr.pull_state = nil
-   #  pulls = pr.pulls # default state is 'open'
-   #  pulls.should eq([pull_object, pull_object2])
+    pr.pull_state = nil
+    pulls = pr.pulls # default state is 'open'
+    pulls.should eq([pull_object, pull_object2])
   end
 
 end

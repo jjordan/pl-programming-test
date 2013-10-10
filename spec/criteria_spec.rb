@@ -8,8 +8,8 @@ describe PreReviewer::Criteria, "initialize" do
                     ]
 
     config = double("config")
+    PreReviewer::Config.should_receive(:instance).and_return( config )
     criteria = PreReviewer::Criteria.new
-    criteria.config = config
     # test that it finds the appropriate criteria file from the config
     config.should_receive( :criteria_file ).and_return( :file )
     # then it opens that file

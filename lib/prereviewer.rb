@@ -8,7 +8,7 @@
 
 # This class is the main program logic
 
-require 'configurability'
+require 'config'
 require 'pathname'
 require 'request'
 require 'repository'
@@ -21,15 +21,13 @@ HOMEDIR_CONFIG_PATH = '.prereviewer/config.yml'
 module PreReviewer
 
   class Main
-    extend Configurability
     # This method initializes the program
     def initialize
       args = ARGV.dup
+      @config = initialize_config( args )
       @request = PreReviewer::Request.new( args )
       @repo = PreReviewer::Repository.new( @request )
       @criteria = PreReviewer::Criteria.new
-      # initialize this last, since it's callback configures all the above
-      @config = initialize_config( args )
     end
 
     # This method creates the config object
@@ -43,9 +41,8 @@ module PreReviewer
       else
         config_path = BASEPATH + DEFAULT_CONFIG_PATH
       end
-      config = Configurability::Config.load( config_path )
-      Configurability.configure_objects( config )
-      return config
+      PreReviewer::Config.load( config_path )
+      return PreReviewer::Config.instance
     end
 
     # This method runs the program based on defaults from the config

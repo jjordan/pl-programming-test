@@ -2,13 +2,13 @@
 
 require 'change'
 
-describe PreReviewer::Change, "new_from_hash" do
+describe PreReviewer::Change, "new" do
   it "knows its filename and patch" do
     my_hash = {
       'filename' => 'spec/unit/provider/package/rpm_spec.rb',
       'patch' => '@@ -134,7 +134,7 @@\n \n     describe \"when not already installed\" do',
     }
-    change = PreReviewer::Change.new_from_hash( my_hash )
+    change = PreReviewer::Change.new( my_hash )
     change.filename.should == 'spec/unit/provider/package/rpm_spec.rb'
     change.patch.should == '@@ -134,7 +134,7 @@\n \n     describe \"when not already installed\" do'
 
@@ -27,7 +27,7 @@ describe PreReviewer::Change, "render" do
     criteria.should_receive( :component ).and_return( :change )
     criteria.should_receive( :specifier ).and_return( :any )
     criteria.should_receive( :meaning ).and_return( :interesting )
-    change = PreReviewer::Change.new_from_hash( my_hash )
+    change = PreReviewer::Change.new( my_hash )
     change.render(criteria).should == 'matched: @@ -134,7 +134,7 @@\n \n     describe \"when not already installed\" do'
 
     criteria2 = double("criteria2")
@@ -36,7 +36,7 @@ describe PreReviewer::Change, "render" do
     criteria2.should_receive( :component ).and_return( :change )
     criteria2.should_receive( :specifier ).and_return( :any )
     criteria2.should_receive( :meaning ).and_return( :interesting )
-    change = PreReviewer::Change.new_from_hash( my_hash )
+    change = PreReviewer::Change.new( my_hash )
     change.render(criteria2).should == 'matched: spec/unit/provider/package/rpm_spec.rb'
 
   end
@@ -52,7 +52,7 @@ describe PreReviewer::Change, "render" do
     criteria.should_receive( :component ).and_return( :change )
     criteria.should_receive( :specifier ).and_return( :any )
     criteria.should_receive( :meaning ).and_return( :interesting )
-    change = PreReviewer::Change.new_from_hash( my_hash )
+    change = PreReviewer::Change.new( my_hash )
     change.render(criteria).should == nil
   end
 
@@ -63,7 +63,7 @@ describe PreReviewer::Change, "render" do
     }
     criteria = double("criteria")
     criteria.should_receive( :component ).and_return( :pull_request )
-    change = PreReviewer::Change.new_from_hash( my_hash )
+    change = PreReviewer::Change.new( my_hash )
     change.render(criteria).should == nil
   end
 

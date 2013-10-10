@@ -7,8 +7,8 @@ describe PreReviewer::Fetcher, "fetch" do
     config = double("config")
     url = 'http://www.google.com'
     HTTParty.should_receive(:get).with( url ).and_return( :response )
+    PreReviewer::Config.should_receive(:instance).and_return( config )
     fetcher = PreReviewer::Fetcher.new
-    fetcher.config = config
     config.should_receive( :extra_params ).and_return( nil )
     response = fetcher.fetch( url )
     response.should == :response
@@ -16,8 +16,8 @@ describe PreReviewer::Fetcher, "fetch" do
 
   it "should attach the optional parameters if any are in the config" do
     config = double("config")
+    PreReviewer::Config.stub(:instance).and_return( config )
     fetcher = PreReviewer::Fetcher.new
-    fetcher.config = config
     url = 'http://www.google.com'
     param = 'access_token'
     value = 'l2k3jlkj32l3k4'

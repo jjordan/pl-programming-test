@@ -1,10 +1,11 @@
+require 'config'
 require 'httparty'
 
 module PreReviewer
   class Fetcher
     attr_accessor :config
     def initialize
-      @config = nil
+      @config = PreReviewer::Config.instance
     end
 
     def fetch( url )

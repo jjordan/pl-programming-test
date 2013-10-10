@@ -1,12 +1,12 @@
-require 'configurability'
+require 'config'
 require 'criterion'
 
 module PreReviewer
   class Criteria
     include Enumerable
-    attr_accessor :config
-    extend Configurability
+    attr_reader :config
     def initialize
+      @config = PreReviewer::Config.instance
       @index = 0
     end
 

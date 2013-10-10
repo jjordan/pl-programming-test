@@ -1,23 +1,25 @@
-require 'configurability'
+require 'fetcher'
+require 'config'
 
 module PreReviewer
   class Repository
-    extend Configurability
-    attr_reader :name, :account, :pulls, :selected_pulls
-    attr_accessor :pull_state, :config
+    attr_reader :name, :account, :pulls, :selected_pulls, :config
+    attr_accessor :pull_state
     def initialize( request )
+      @request = request
       @account = request.account
       @name = request.repo
       @pull_state = 'open'
       @pulls = []
+      @config = PreReviewer::Config.instance
     end
 
     def pulls
-      fetcher = @config.fetcher
+      fetcher = PreReviewer::Fetcher.new
       api_url = @config.pull_api( @account, @name )
-      pulls = fetcher.get( api_url )
+      pulls = fetcher.fetch( api_url )
       pulls.each do |pull|
-        @pulls << PreReviewer::PullRequest.new_from_hash( pull )
+        @pulls << PreReviewer::PullRequest.new( @request, pull )
       end
       # check for no pulls
       # check for no pulls of 'type'

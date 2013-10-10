@@ -34,8 +34,8 @@ describe PreReviewer::Main, "initialize" do
     args = ['puppetlabs/puppet']
     ARGV.should_receive( :dup ).and_return(args)
     ENV.should_receive(:[]).with('HOME').and_return(HOMEDIR)
-    Configurability::Config.should_receive( :load ).with( expected_path ).and_return( :config )
-    Configurability.should_receive( :configure_objects ).with( :config )
+    PreReviewer::Config.should_receive( :load ).with( expected_path )
+    PreReviewer::Config.should_receive( :instance).and_return( :config )
 
     PreReviewer::Request.should_receive(:new).with(args).and_return( :request )
     PreReviewer::Repository.should_receive(:new).with( :request )
@@ -49,8 +49,8 @@ describe PreReviewer::Main, "initialize" do
     ENV.should_receive(:[]).with('HOME').and_return(HOMEDIR)
     FileUtils.mkdir_p( HOMEDIR + '.prereviewer' )
     FileUtils.touch(HOMEDIR + '.prereviewer/config.yml')
-    Configurability::Config.should_receive( :load ).with( HOMEDIR + '.prereviewer/config.yml' ).and_return( :config )
-    Configurability.should_receive( :configure_objects ).with( :config )
+    PreReviewer::Config.should_receive( :load ).with( HOMEDIR + '.prereviewer/config.yml' )
+    PreReviewer::Config.should_receive( :instance ).and_return( :config )
 
     PreReviewer::Request.stub(:new).with(args).and_return( :request )
     PreReviewer::Repository.stub(:new).with( :request )
@@ -65,8 +65,8 @@ describe PreReviewer::Main, "initialize" do
     FileUtils.mkdir_p( HOMEDIR + 'conf' )
     FileUtils.touch(HOMEDIR + 'conf/config.yml')
     ARGV.should_receive( :dup ).and_return(args)
-    Configurability::Config.should_receive( :load ).with( specific_config ).and_return( :config )
-    Configurability.should_receive( :configure_objects ).with( :config )
+    PreReviewer::Config.should_receive( :load ).with( specific_config )
+    PreReviewer::Config.should_receive( :instance ).and_return( :config )
 
     PreReviewer::Request.stub(:new).with(args).and_return( :request )
     PreReviewer::Repository.stub(:new).with( :request )
@@ -83,8 +83,8 @@ describe PreReviewer::Main, "run" do
     args = ['puppetlabs/puppet']
     ARGV.stub( :dup ).and_return(args)
     ENV.stub(:[]).with('HOME').and_return(HOMEDIR)
-    Configurability::Config.stub( :load ).with( expected_path ).and_return( :config )
-    Configurability.stub( :configure_objects ).with( :config )
+    PreReviewer::Config.stub( :load ).with( expected_path )
+    PreReviewer::Config.stub( :instance ).and_return( :config )
 
     repo = double("repo")
     criterion1 = double("criterion 1")
