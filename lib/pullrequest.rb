@@ -1,6 +1,7 @@
 require 'config'
 require 'change'
 require 'json'
+require 'fetcher'
 
 module PreReviewer
   class PullRequest 
@@ -26,9 +27,9 @@ module PreReviewer
 
     def changes
       if(@changes.empty?)
-        fetcher = @config.fetcher
+        fetcher = PreReviewer::Fetcher.new
         api_url = @config.change_api( @account, @name, @number )
-        changes = fetcher.get( api_url )
+        changes = fetcher.fetch( api_url )
         changes.each do |change|
           @changes << PreReviewer::Change.new( change )
         end

@@ -2,6 +2,8 @@
 
 require 'pullrequest'
 require 'change'
+require 'config'
+require 'fetcher'
 
 describe PreReviewer::PullRequest, "initialize" do
   it "knows its account, name and number" do
@@ -26,9 +28,9 @@ describe PreReviewer::PullRequest, "changes" do
 
     request.stub( :account ).and_return('puppetlabs')
     request.stub( :name ).and_return('puppet')
-    config.should_receive( :fetcher ).and_return( fetcher )
+    PreReviewer::Fetcher.should_receive( :new ).and_return( fetcher )
     config.should_receive( :change_api ).with( 'puppetlabs', 'puppet', 1522 ).and_return( :api_url )
-    fetcher.should_receive( :get ).with( :api_url ).and_return( [{}] )
+    fetcher.should_receive( :fetch ).with( :api_url ).and_return( [{}] )
     PreReviewer::Config.stub( :instance ).and_return( config )
     pull = PreReviewer::PullRequest.new( request, {"number" => 1522} )
     change = double("change")
