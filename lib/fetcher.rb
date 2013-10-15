@@ -10,7 +10,10 @@ module PreReviewer
 
     def fetch( url )
       url = add_extra_params( url )
+      #p url
       response = HTTParty.get( url )
+      j_response = JSON.parse( response.body )
+      return j_response
     end
 
     protected

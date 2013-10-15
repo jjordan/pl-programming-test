@@ -7,13 +7,17 @@ module PreReviewer
     attr_reader :config
     def initialize
       @config = PreReviewer::Config.instance
-      @index = 0
+      @criterions = []
     end
-
-    def each
+    def each &block
       load_criteria
-      yield @criterions[@index]
-      @index += 1
+      @criterions.each do |criterion|
+        if block_given?
+          block.call criterion
+        else
+          yield criterion
+        end
+      end
     end
 
     def size
@@ -23,13 +27,16 @@ module PreReviewer
 
     protected
     def load_criteria
-      unless((@criterions) && !@criterions.empty)
+      unless((@criterions) && !@criterions.empty?)
         @criterions = []
-        criterion_data = YAML::load(@config.criteria_file)
+        criterion_data = @config.criteria
         criterion_data.each do |criterion_datum|
           @criterions << PreReviewer::Criterion.new( criterion_datum )
         end
       end
+#      p @criterions.inspect
+      return @criterions
     end
+
   end
 end

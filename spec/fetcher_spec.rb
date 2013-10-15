@@ -6,7 +6,10 @@ describe PreReviewer::Fetcher, "fetch" do
   it "gets the target URL with optional additions from the config" do
     config = double("config")
     url = 'http://www.google.com'
-    HTTParty.should_receive(:get).with( url ).and_return( :response )
+    response = double("response")
+    HTTParty.should_receive(:get).with( url ).and_return( response )
+    response.should_receive(:body).and_return( :body )
+    JSON.should_receive( :parse ).with( :body ).and_return( :response )
     PreReviewer::Config.should_receive(:instance).and_return( config )
     fetcher = PreReviewer::Fetcher.new
     config.should_receive( :extra_params ).and_return( nil )
@@ -23,8 +26,11 @@ describe PreReviewer::Fetcher, "fetch" do
     value = 'l2k3jlkj32l3k4'
     token_param = "?%s=%s" % [param, value]
     config.should_receive( :extra_params ).twice.and_return( {param => value} )
-    HTTParty.should_receive(:get).with( url + token_param ).and_return( :response )
-    response = fetcher.fetch( url )
+    response = double("response")
+    HTTParty.should_receive(:get).with( url + token_param ).and_return( response )
+    response.should_receive(:body).and_return( :body )
+    JSON.should_receive( :parse ).with( :body ).and_return( :response )
+    output_response = fetcher.fetch( url )
   end
 
 end

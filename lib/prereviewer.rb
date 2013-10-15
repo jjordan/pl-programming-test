@@ -50,10 +50,16 @@ module PreReviewer
       pulls = @repo.pulls
       if(pulls)
         pulls.each do |pull|
+          changes = []
           @criteria.each do |criterion|
+          #  p criterion.inspect
             criterion.apply(pull)
+            pull.changes.each do |change|
+              changes << change.render( criterion )
+            end
           end
-          pull.render
+          puts pull.render
+#          puts changes.join("\n")
         end
       end
     end

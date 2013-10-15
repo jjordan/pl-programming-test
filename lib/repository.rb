@@ -1,9 +1,10 @@
 require 'fetcher'
 require 'config'
+require 'pullrequest'
 
 module PreReviewer
   class Repository
-    attr_reader :name, :account, :pulls, :selected_pulls, :config
+    attr_reader :name, :account, :selected_pulls, :config
     attr_accessor :pull_state
     def initialize( request )
       @request = request
@@ -18,6 +19,7 @@ module PreReviewer
       fetcher = PreReviewer::Fetcher.new
       api_url = @config.pull_api( @account, @name )
       pulls = fetcher.fetch( api_url )
+#      p pulls
       pulls.each do |pull|
         @pulls << PreReviewer::PullRequest.new( @request, pull )
       end

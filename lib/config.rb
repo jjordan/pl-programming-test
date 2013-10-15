@@ -11,7 +11,9 @@ module PreReviewer
   class Config
     include Singleton
     def self::load( config_path )
-      @@config_data = YAML::load( config_path )
+#      p config_path
+      @@config_data = YAML::load( File.read(config_path.to_s) )
+#      p @@config_data
       raise ConfigError, "'criteria' section missing from config" unless(config_data_exists?('criteria'))
     end
 

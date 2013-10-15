@@ -6,16 +6,17 @@ require 'config'
 require 'fetcher'
 
 describe PreReviewer::PullRequest, "initialize" do
-  it "knows its account, name and number" do
+  it "knows its account, name, state and number" do
     config = double("config")
     request = double("request")
     request.should_receive( :account ).and_return('puppetlabs')
-    request.should_receive( :name ).and_return('puppet')
+    request.should_receive( :repo ).and_return('puppet')
     PreReviewer::Config.should_receive( :instance ).and_return( config )
-    pull = PreReviewer::PullRequest.new( request, {"number" => 1521} )
+    pull = PreReviewer::PullRequest.new( request, {"number" => 1521, "state" => "open"} )
     pull.account.should == 'puppetlabs'
     pull.name.should == 'puppet'
     pull.number.should == 1521
+    pull.state.should == "open"
   end
 
 end
@@ -27,7 +28,7 @@ describe PreReviewer::PullRequest, "changes" do
     fetcher = double("fetcher")
 
     request.stub( :account ).and_return('puppetlabs')
-    request.stub( :name ).and_return('puppet')
+    request.stub( :repo ).and_return('puppet')
     PreReviewer::Fetcher.should_receive( :new ).and_return( fetcher )
     config.should_receive( :change_api ).with( 'puppetlabs', 'puppet', 1522 ).and_return( :api_url )
     fetcher.should_receive( :fetch ).with( :api_url ).and_return( [{}] )
@@ -36,6 +37,7 @@ describe PreReviewer::PullRequest, "changes" do
     change = double("change")
     PreReviewer::Change.should_receive( :new ).with( {} ).and_return( change )
     changes = pull.changes
+    pull.is_interesting = true
     pull.is_interesting?.should == true
     pull.is_interesting = false
     pull.is_interesting?.should == false
@@ -49,11 +51,13 @@ describe PreReviewer::PullRequest, "render" do
     fetcher = double("fetcher")
 
     request.stub( :account ).and_return('puppetlabs')
-    request.stub( :name ).and_return('puppet')
+    request.stub( :repo ).and_return('puppet')
     pull_number = 1523
     config.should_receive( :html_root ).twice.and_return('https://github.com')
     PreReviewer::Config.stub( :instance ).and_return( config )
     pull = PreReviewer::PullRequest.new( request, {"number" => pull_number} )
+    pull.is_interesting = true
+
     pull.render.should == "https://github.com/puppetlabs/puppet/pull/#{pull_number} - Interesting"
     pull.is_interesting = false
     pull.render.should == "https://github.com/puppetlabs/puppet/pull/#{pull_number} - Not Interesting"

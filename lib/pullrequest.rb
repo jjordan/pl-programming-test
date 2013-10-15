@@ -5,15 +5,16 @@ require 'fetcher'
 
 module PreReviewer
   class PullRequest 
-    attr_reader :account, :name, :number
+    attr_reader :account, :name, :number, :state
 
     def initialize( request, input )
       @config = PreReviewer::Config.instance
       @request = request
       @account = request.account
-      @name = request.name
+      @name = request.repo
       @number = input["number"]
-      @interesting = true
+      @state = input["state"]
+      @interesting = false
       @changes = []
     end
 
@@ -31,6 +32,7 @@ module PreReviewer
         api_url = @config.change_api( @account, @name, @number )
         changes = fetcher.fetch( api_url )
         changes.each do |change|
+#          p change.inspect
           @changes << PreReviewer::Change.new( change )
         end
       end
