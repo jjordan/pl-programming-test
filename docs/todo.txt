@@ -1,13 +1,72 @@
- * Finish Criteria class (composition of Criterion objects)
- * Finish Request class
-
- * Integrate configurability into my code
  * Finish the code and test that it all works together.
-
+   + create the config file and the criteria file
+   + put them into default locations
  * Integrate loggability into my code
  * Set up project fundamentals with hoe
  * Add a rakefile (if hoe doesn't do that)
  * Install rcov and make sure my code is 100% covered
  * Make sure that my code is 100% documented
+ * Do more robust error checking
  * Go back through and refactor anything that looks ugly
+ * Check for bugs
+
+
+
+@config.criteria_file -> data within config?
+@config.fetcher -> this should be a new class
+@config.change_api( @account, @name, @number ) -> method on that class?
+@config.html_root -> constant?
+@config.pull_api( @account, @name ) -> method on that class?
+
+
+I should also make another test program that performs the same as the
+proof, but using the classes I wrote.
+
+ack, so do I change the config system again?  Or do I change the classes that use the config
+to use a simpler version?
+
+How about we hard-code all of this first, and then refactor it out later.
+
+Plus the criteria is really the only thing that I know I don't want hard coded,
+so perhaps it's the only thing in the config?
+
+
+================================================================================
+Ugh, I have to remove configurability completely, because it doesn't work for me:
+
+The config will be distributed to all of the classes at run-time when the method is called,
+but some of the objects are created later, and so do not have the config object yet.
+
+Honestly, I think you have to design for configurability, rather than try to plug it in after the fact.
+
+I'll switch back to my singleton idea tomorrow.
+Switch back:
+
+ * Create a new config class, and add the missing methods from above *check*
+ * Find all references to configurability, change them *check*
+ * Change references to old fetcher *check*
+ * Remove access token append functionality from fetcher (it belongs in config) *delayed*
+ * continue working on review script, see if we can get it to behave identically to proof *close*
+   + fix config file, combine criteria with normal config *check*
+================================================================================
+
+1/2 a day:
+ * Fix broken tests *check*
+ * Add new tests to match new behaviors
+ * Add ability to optionally display why a given pull is interesting, via matched criteria *we'll then be functionally complete*
+
+1 day:
+ * Make the regex/matchers work more cleanly
+ * Replace httparty with just regular HTTP
+ * Add Rakefile
+ * make rspec rake task
+ * make gem rake task
+ * Make install rake task
+ * Make uninstall rake task?
+ * add additional command-line/config arguments, so as to enable verbose mode and debugging mode
+
+1 day:
+ * add documentation
+ * ensure 100% test coverage
+ * add better error checking
 

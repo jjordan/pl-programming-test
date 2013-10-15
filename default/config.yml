@@ -1,0 +1,39 @@
+---
+access_token: 1d9f5c765bd47e1a88468e86836408ed68b715a1
+html_root: http://github.com/
+change_api: '%s/%s/pulls/%s/files'
+pull_api: '%s/%s/pulls'
+extra_params:   
+criteria:
+  - :specifier: :none
+    :field: :filename
+    :meaning: :interesting
+    :match: "spec/"
+  - :specifier: :any
+    :field: :patch
+    :meaning: :interesting
+    :match: "/dev/null"
+  - :specifier: :any
+    :field: :patch
+    :meaning: :interesting
+    :match: "raise"
+  - :specifier: :any
+    :field: :patch
+    :meaning: :interesting
+    :match: ".write"
+  - :specifier: :any
+    :field: :patch
+    :meaning: :interesting
+    :match: "%x"
+  - :specifier: :any
+    :field: :patch
+    :meaning: :interesting
+    :match: "exec"
+  - :specifier: :any
+    :field: :filename
+    :meaning: :interesting
+    :match: "Gemfile"
+  - :specifier: :any
+    :field: :filename
+    :meaning: :interesting
+    :match: ".gemspec"

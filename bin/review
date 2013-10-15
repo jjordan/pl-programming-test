@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+require 'pathname'
+require 'httparty'
+
+BASE_PATH = Pathname(__FILE__).parent.dirname.realpath
+$:.push(BASE_PATH + 'lib')
+require 'prereviewer'
+pr = PreReviewer::Main.new
+pr.run
+
