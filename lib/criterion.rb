@@ -8,10 +8,10 @@ module PreReviewer
       # change this to 'keyword' and add a 'match type', which is either: beginning, ending, contains, exact_match, and the default is exact_match
       first_boundary = last_boundary = '\b'
       if( input[:match][0] =~ /\W/ )
-        first_boundary = '(\s|\W)'
+        first_boundary = ''
       end
       if( input[:match][-1] =~ /\W/ )
-        last_boundary =  '(\s|\W)'
+        last_boundary =  ''
       end
 #      puts "boundary: #{first_boundary}"
       @match = Regexp.new(first_boundary + Regexp.escape(input[:match]) + last_boundary) # matches are escaped in a different place

@@ -101,10 +101,14 @@ describe PreReviewer::Main, "run" do
     criterion1.should_receive(:apply).with( pull2 )
     criterion2.should_receive(:apply).with( pull1 )
     criterion2.should_receive(:apply).with( pull2 )
+    criterion1.should_receive(:applied?).twice.and_return( true )
+    criterion2.should_receive(:applied?).twice.and_return( false )
 
     pull1.should_receive( :changes ).twice.and_return([])
     pull1.should_receive( :render )
+    pull1.should_receive( :render_reason ).with( criterion1 ).and_return(:output)
     pull2.should_receive( :render )
+    pull2.should_receive( :render_reason ).with( criterion1 ).and_return(:output)
     pull2.should_receive( :changes ).twice.and_return([])
     # not sure how to mock 'puts':
     $stdout = File.open "/dev/null", "a"

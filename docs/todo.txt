@@ -58,8 +58,8 @@ Switch back:
 1 day:
  * Make the regex/matchers work more cleanly
  * Replace httparty with just regular HTTP
- * Add Rakefile
- * make rspec rake task
+ * Add Rakefile *check*
+ * make rspec rake task *check*
  * make gem rake task
  * Make install rake task
  * Make uninstall rake task?
@@ -68,5 +68,5 @@ Switch back:
 1 day:
  * add documentation
  * ensure 100% test coverage
- * add better error checking
+ * add better error checking/exception handling
 

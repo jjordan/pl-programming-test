@@ -25,11 +25,14 @@ module PreReviewer
       end
       # check for no pulls
       # check for no pulls of 'type'
+      @selected_pulls = []
+
       if(@pull_state)
         @selected_pulls = @pulls.select {|p| p.state == @pull_state}
       else
-        @pulls
+        @selected_pulls = @pulls
       end
+      return @selected_pulls
     end
   end
 

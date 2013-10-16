@@ -22,20 +22,20 @@ describe PreReviewer::Change, "render" do
       'patch' => '@@ -134,7 +134,7 @@\n \n     describe \"when not already installed\" do',
     }
     criteria = double("criteria")
-    criteria.should_receive( :match ).and_return( Regexp.new(/\bdescribe\b/) )
+    criteria.should_receive( :match ).twice.and_return( Regexp.new(/\bdescribe\b/) )
     criteria.should_receive( :field ).and_return( :patch )
     criteria.should_receive( :specifier ).and_return( :any )
     criteria.should_receive( :meaning ).and_return( :interesting )
     change = PreReviewer::Change.new( my_hash )
-    change.render(criteria).should == 'matched: @@ -134,7 +134,7 @@\n \n     describe \"when not already installed\" do'
+    change.render(criteria).should == "\tfound '(?-mix:\\bdescribe\\b)' in patch"
 
     criteria2 = double("criteria2")
-    criteria2.should_receive( :match ).and_return( Regexp.new(/\bprovider\/\b/) )
+    criteria2.should_receive( :match ).twice.and_return( Regexp.new(/\bprovider\/\b/) )
     criteria2.should_receive( :field ).twice.and_return( :filename )
     criteria2.should_receive( :specifier ).and_return( :any )
     criteria2.should_receive( :meaning ).and_return( :interesting )
     change = PreReviewer::Change.new( my_hash )
-    change.render(criteria2).should == 'matched: spec/unit/provider/package/rpm_spec.rb'
+    change.render(criteria2).should == "\tfound '(?-mix:\\bprovider\\/\\b)' in spec/unit/provider/package/rpm_spec.rb"
 
   end
 

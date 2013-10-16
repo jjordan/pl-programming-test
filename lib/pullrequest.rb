@@ -45,5 +45,26 @@ module PreReviewer
       "#{root}/#{@account}/#{@name}/pull/#{@number} - #{status}"
     end
 
+    def render_reason( criterion )
+      if @interesting
+        if criterion.specifier == :none
+          if criterion.field == :filename
+            return "\tno file names contained '%s'" % [criterion.match.to_s]
+          end
+          if criterion.field == :patch
+            return "\tno patches contained '%s'" % [criterion.match.to_s]
+          end
+        end
+        if criterion.specifier == :all
+          if criterion.field == :filename
+            return "\tall filenames contained '%s'" % [criterion.match.to_s]
+          end
+          if criterion.field == :patch
+            return "\tall patches contained '%s'" % [criterion.match.to_s]
+          end
+        end
+      end
+    end
+
   end
 end

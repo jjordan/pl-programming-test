@@ -51,15 +51,18 @@ module PreReviewer
       if(pulls)
         pulls.each do |pull|
           changes = []
+          reasons = []
           @criteria.each do |criterion|
           #  p criterion.inspect
             criterion.apply(pull)
+            reasons << pull.render_reason( criterion ) if( criterion.applied? )
             pull.changes.each do |change|
               changes << change.render( criterion )
             end
           end
           puts pull.render
-#          puts changes.join("\n")
+          puts reasons.uniq.join("\n") unless(reasons.empty?)
+          puts changes.compact.uniq.join("\n") unless(changes.compact.empty?)
         end
       end
     end
