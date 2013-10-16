@@ -61,7 +61,7 @@ module PreReviewer
             end
           end
           puts pull.render
-          puts reasons.uniq.join("\n") unless(reasons.empty?)
+          puts reasons.compact.uniq.join("\n") unless(reasons.compact.empty?)
           puts changes.compact.uniq.join("\n") unless(changes.compact.empty?)
         end
       end

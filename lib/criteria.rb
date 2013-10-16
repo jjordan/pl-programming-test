@@ -11,12 +11,12 @@ module PreReviewer
     end
     def each &block
       load_criteria
-      @criterions.each do |criterion|
-        if block_given?
+      if block_given?
+        @criterions.each do |criterion|
           block.call criterion
-        else
-          yield criterion
         end
+      else
+        @criterions.each
       end
     end
 

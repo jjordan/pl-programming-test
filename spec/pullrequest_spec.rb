@@ -65,3 +65,98 @@ describe PreReviewer::PullRequest, "render" do
   end
 end
 
+describe PreReviewer::PullRequest, "render_reason" do
+  it "outputs nothing if the pull request is not interesting" do
+    config = double("config")
+    request = double("request")
+    fetcher = double("fetcher")
+
+    request.stub( :account ).and_return('puppetlabs')
+    request.stub( :repo ).and_return('puppet')
+    pull_number = 1523
+    PreReviewer::Config.stub( :instance ).and_return( config )
+    pull = PreReviewer::PullRequest.new( request, {"number" => pull_number} )
+    pull.is_interesting = false
+    criterion = double("criterion")
+    response = pull.render_reason( criterion )
+    response.should == nil
+  end
+  
+  it "renders output for when no file names match a pattern" do
+    config = double("config")
+    request = double("request")
+    fetcher = double("fetcher")
+
+    request.stub( :account ).and_return('puppetlabs')
+    request.stub( :repo ).and_return('puppet')
+    pull_number = 1523
+    PreReviewer::Config.stub( :instance ).and_return( config )
+    pull = PreReviewer::PullRequest.new( request, {"number" => pull_number} )
+    pull.is_interesting = true
+    criterion = double("criterion")
+    criterion.should_receive(:specifier).and_return( :none )
+    criterion.should_receive(:field).and_return( :filename )
+    criterion.should_receive(:match).and_return( :keyword )
+    response = pull.render_reason( criterion )
+    response.should == "\tno file names contained 'keyword'"
+  end
+
+  it "renders output for when all file names match a pattern" do
+    config = double("config")
+    request = double("request")
+    fetcher = double("fetcher")
+
+    request.stub( :account ).and_return('puppetlabs')
+    request.stub( :repo ).and_return('puppet')
+    pull_number = 1523
+    PreReviewer::Config.stub( :instance ).and_return( config )
+    pull = PreReviewer::PullRequest.new( request, {"number" => pull_number} )
+    pull.is_interesting = true
+    criterion = double("criterion")
+    criterion.should_receive(:specifier).twice.and_return( :all )
+    criterion.should_receive(:field).and_return( :filename )
+    criterion.should_receive(:match).and_return( :keyword )
+    response = pull.render_reason( criterion )
+    response.should == "\tall file names contained 'keyword'"
+  end
+
+  it "renders output for when no patches match a pattern" do
+    config = double("config")
+    request = double("request")
+    fetcher = double("fetcher")
+
+    request.stub( :account ).and_return('puppetlabs')
+    request.stub( :repo ).and_return('puppet')
+    pull_number = 1523
+    PreReviewer::Config.stub( :instance ).and_return( config )
+    pull = PreReviewer::PullRequest.new( request, {"number" => pull_number} )
+    pull.is_interesting = true
+    criterion = double("criterion")
+    criterion.should_receive(:specifier).and_return( :none )
+    criterion.should_receive(:field).twice.and_return( :patch )
+    criterion.should_receive(:match).and_return( :keyword )
+    response = pull.render_reason( criterion )
+    response.should == "\tno patches contained 'keyword'"
+  end
+
+  it "renders output for when all patches match a pattern" do
+    config = double("config")
+    request = double("request")
+    fetcher = double("fetcher")
+
+    request.stub( :account ).and_return('puppetlabs')
+    request.stub( :repo ).and_return('puppet')
+    pull_number = 1523
+    PreReviewer::Config.stub( :instance ).and_return( config )
+    pull = PreReviewer::PullRequest.new( request, {"number" => pull_number} )
+    pull.is_interesting = true
+    criterion = double("criterion")
+    criterion.should_receive(:specifier).twice.and_return( :all )
+    criterion.should_receive(:field).twice.and_return( :patch )
+    criterion.should_receive(:match).and_return( :keyword )
+    response = pull.render_reason( criterion )
+    response.should == "\tall patches contained 'keyword'"
+  end
+
+end
+

@@ -2,9 +2,6 @@
 
 require 'criterion'
 
-def bound_and_escape( keyword )
-  '\b' + Regexp.escape( keyword ) + '\b'
-end
 
 describe PreReviewer::Criterion, "initialize" do
   it "knows what its fields are" do    
@@ -12,7 +9,24 @@ describe PreReviewer::Criterion, "initialize" do
     criterion.specifier.should == :all
     criterion.field.should == :filename
     criterion.meaning.should == :interesting
-    criterion.match.should == Regexp.new(bound_and_escape('spec') )
+    criterion.keyword.should == 'spec'
+    criterion.match.should == Regexp.new('\b' + 'spec' + '\b' )
+  end
+  it "knows how to bound a word starting with a non-word character" do
+    criterion = PreReviewer::Criterion.new({:specifier => :all, :field => :filename, :meaning => :interesting, :match => 'spec/'})
+    criterion.specifier.should == :all
+    criterion.field.should == :filename
+    criterion.meaning.should == :interesting
+    criterion.keyword.should == 'spec/'
+    criterion.match.should == Regexp.new('\b' + 'spec/' )
+  end
+  it "knows how to bound a word ending with a non-word character" do
+    criterion = PreReviewer::Criterion.new({:specifier => :all, :field => :filename, :meaning => :interesting, :match => '%x'})
+    criterion.specifier.should == :all
+    criterion.field.should == :filename
+    criterion.meaning.should == :interesting
+    criterion.keyword.should == '%x'
+    criterion.match.should == Regexp.new( '%x' +'\b' )
   end
 
 end
@@ -158,6 +172,23 @@ EOS
     criterion.apply( pull_request )
     criterion.applied?.should == true
     criterion.matched?.should == true
+  end
+
+  it "can handle when not-matching an uninteresting change makes it interesting" do
+    # positive test
+    pull_request = double("pull request")
+    change = double("change")
+    change2 = double("change 2")
+    pull_request.should_receive( :changes ).and_return( [change, change2] )
+    pull_request.should_receive( :is_interesting= ).with( true )
+    change.should_receive(:patch).and_return(<<EOS
+@@ -134,7 +134,7 @@\n \n     describe \"when not already installed\" do\n       it \"should only include the '-i' flag\" do\n-        Puppet::Util::Execution.expects(:execute).with([\"/bin/rpm\", \"-i\", '/path/to/package'], execute_options)\n+        Puppet::Util::Execution.expects(:execute).with([\"/bin/rpm\", [\"-i\"], '/path/to/package'], execute_options)\n         provider.install\n       end\n    end
+EOS
+)
+    change2.should_receive(:patch).and_return('@@ -187,3 + 187,3 @@\n+haptic baloney dancers\n+are nice\n+at twice the prie.\n')
+    criterion = PreReviewer::Criterion.new({:specifier => :any, :field => :patch, :meaning => :uninteresting, :match => '%x'})
+    criterion.apply( pull_request )
+    criterion.applied?.should == false
   end
 
 end

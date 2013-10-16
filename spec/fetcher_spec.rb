@@ -33,4 +33,20 @@ describe PreReviewer::Fetcher, "fetch" do
     output_response = fetcher.fetch( url )
   end
 
+  it "can add extra params to an existing query" do
+    config = double("config")
+    PreReviewer::Config.stub(:instance).and_return( config )
+    fetcher = PreReviewer::Fetcher.new
+    url = 'http://www.google.com?q=foobarbas'
+    param = 'access_token'
+    value = 'l2k3jlkj32l3k4'
+    token_param = "&%s=%s" % [param, value]
+    config.should_receive( :extra_params ).twice.and_return( {param => value} )
+    response = double("response")
+    HTTParty.should_receive(:get).with( url + token_param ).and_return( response )
+    response.should_receive(:body).and_return( :body )
+    JSON.should_receive( :parse ).with( :body ).and_return( :response )
+    output_response = fetcher.fetch( url )
+  end
+
 end

@@ -54,10 +54,9 @@ module PreReviewer
           if criterion.field == :patch
             return "\tno patches contained '%s'" % [criterion.match.to_s]
           end
-        end
-        if criterion.specifier == :all
+        elsif criterion.specifier == :all
           if criterion.field == :filename
-            return "\tall filenames contained '%s'" % [criterion.match.to_s]
+            return "\tall file names contained '%s'" % [criterion.match.to_s]
           end
           if criterion.field == :patch
             return "\tall patches contained '%s'" % [criterion.match.to_s]

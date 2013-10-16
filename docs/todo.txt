@@ -52,8 +52,8 @@ Switch back:
 
 1/2 a day:
  * Fix broken tests *check*
+ * Add ability to optionally display why a given pull is interesting, via matched criteria *we'll then be functionally complete*  *check*
  * Add new tests to match new behaviors
- * Add ability to optionally display why a given pull is interesting, via matched criteria *we'll then be functionally complete*
 
 1 day:
  * Make the regex/matchers work more cleanly

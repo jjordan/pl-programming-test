@@ -1,6 +1,6 @@
 module PreReviewer
   class Criterion
-    attr_reader :specifier, :field, :meaning, :match
+    attr_reader :specifier, :field, :meaning, :match, :keyword
     def initialize( input )
       @specifier = input[:specifier]
       @field = input[:field]
@@ -14,10 +14,10 @@ module PreReviewer
         last_boundary =  ''
       end
 #      puts "boundary: #{first_boundary}"
+      @keyword = input[:match]
       @match = Regexp.new(first_boundary + Regexp.escape(input[:match]) + last_boundary) # matches are escaped in a different place
       # ack, if the first character is not a word character, we can't use '\b'
       # we'd have to use \s or \W instead
-
       @applied = false
     end
 
@@ -63,15 +63,9 @@ module PreReviewer
         if(@applied)
 #          puts "Setting pull request to interesting"
           pull_request.is_interesting = true
-        else
-#          puts "Setting pull request to uninteresting"
-#          pull_request.is_interesting = false
         end
       elsif(@meaning.to_sym == :uninteresting)
-        if(@applied)
-#          puts "Setting pull request to uninteresting"
-#          pull_request.is_interesting = false
-        else
+        unless(@applied)
 #          puts "Setting pull request to interesting"
           pull_request.is_interesting = true
         end
