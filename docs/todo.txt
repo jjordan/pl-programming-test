@@ -56,18 +56,19 @@ Switch back:
  * Add new tests to match new behaviors
 
 1 day:
- * Make the regex/matchers work more cleanly
- * Replace httparty with just regular HTTP
+
+
  * Add Rakefile *check*
  * make rspec rake task *check*
  * make rdoc rake task *check*
- * make gem rake task
- * Make install rake task
- * Make uninstall rake task?
- * add additional command-line/config arguments, so as to enable verbose mode and debugging mode
+ * make gem rake task *check*
+ * Make install rake task *not required*
+ * Make uninstall rake task? *not required*
+ * ensure 100% test coverage *check*
 
 1 day:
- * add documentation
- * ensure 100% test coverage
+ * Make the regex/matchers work more cleanly
+ * Replace httparty with just regular HTTP
+ * ensure 100% documentation coverage
  * add better error checking/exception handling
-
+ * add additional command-line/config arguments, so as to enable verbose mode and debugging mode

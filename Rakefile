@@ -43,12 +43,20 @@ spec = Gem::Specification.new do |s|
   s.requirements << 'none'
   s.require_path = 'lib'
   s.files = PKG_FILES
+  s.add_development_dependency 'rspec', '~> 2.0.0', '>= 2.13.0'
+  s.add_development_dependency 'simplecov', '~> 0.7.0', '>= 0.7.1'
+  s.add_runtime_dependency 'json', '~> 1.8', '>= 1.8.1'
+  s.add_runtime_dependency 'httparty', '~> 0.12', '>= 0.12.0'
   s.authors = ['Jeremiah Jordan']
   s.email = 'jjordan@perlreason.com'
+  s.bindir = 'bin'
   s.executables = ['review']
   s.homepage = 'http://www.perlreason.com/prereviewer'
+  s.licenses = ['MIT', 'GPL-2']
+  s.test_files = Dir.glob('spec/*_spec.rb')
+  s.post_install_message = "The executable is 'review' in your gem executables path.  Also see the 'default/config.yml' file in the gem directory for examples on common config options." 
   s.description = <<EOF
-  prereviewer is a program that uses the GitHub API to
+  PreReviewer is a program that uses the GitHub API to
   check the pull requests for changes that look 'interesting',
   where interesting is defined by various match criteria.
 EOF
