@@ -60,6 +60,7 @@ Switch back:
  * Replace httparty with just regular HTTP
  * Add Rakefile *check*
  * make rspec rake task *check*
+ * make rdoc rake task *check*
  * make gem rake task
  * Make install rake task
  * Make uninstall rake task?
