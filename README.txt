@@ -1,13 +1,15 @@
-= pl-programming-test
+pl-programming-test
+===================
 
-* https://github.com/jjordan/pl-programming-test
+https://github.com/jjordan/pl-programming-test
 
-== DESCRIPTION:
+DESCRIPTION:
+------------
 
 * A little repo for a programming test I'm taking.  It's a program to find the pull requests for a given GitHub repository that match certain criteria, and are labeled as 'interesting' for a human to review them further.
 
-== FEATURES/PROBLEMS:
-
+FEATURES/PROBLEMS:
+------------------
 Features:
 * Can have the criteria for interesting/not interesting modified easily in a YAML config file
 * Displays what's interesting along with what match was made
@@ -16,14 +18,24 @@ Problems:
 * Not enough error checking
 * No fun command-line switches
 
-== SYNOPSIS:
+SYNOPSIS:
+---------
+        git clone https://github.com/jjordan/pl-programming-test
+        cd pl-programming-test
+        ./bin/review account/repo [/path/to/config.yml]
 
-git clone https://github.com/jjordan/pl-programming-test
-cd pl-programming-test
-./bin/review account/repo [/path/to/config.yml]
+        https://github.com/candycorn/thingy/pull/3550 - Not Interesting
+        https://github.com/candycorn/thingy/pull/3548 - Interesting
+	    no file names contained '(?-mix:\bspec\/)'
+        https://github.com/candycorn/thingy/pull/3538 - Not Interesting
+        https://github.com/candycorn/thingy/pull/3513 - Interesting
+	    no file names contained '(?-mix:\bspec\/)'
+        https://github.com/candycorn/thingy/pull/3499 - Interesting
+	    no file names contained '(?-mix:\bspec\/)'
+	    found '(?-mix:\.write\b)' in patch
 
-== REQUIREMENTS:
-
+REQUIREMENTS:
+-------------
 Ruby: 1.9.2 and 1.9.3, probably previous revs, depending on dependencies.
 
 Rubygems:
@@ -32,19 +44,19 @@ Rubygems:
 * Rspec 2
 * simplecov 0.7
 
-== INSTALL:
+INSTALL:
+--------
+        git clone https://github.com/jjordan/pl-programming-test
+        cd pl-programming-test
+        rake gem
+        sudo gem install pkg/prereviewer-0.0.1.gem
 
-git clone https://github.com/jjordan/pl-programming-test
-cd pl-programming-test
-rake gem
-sudo gem install pkg/prereviewer-0.0.1.gem
-
-== DEVELOPERS:
-
+DEVELOPERS:
+-----------
 Jeremiah Jordan <jjordan at perlreason dot com>
 
-== LICENSE:
-
+LICENSE:
+--------
 (The MIT License)
 
 Copyright (c) 2013 Jeremiah Jordan
