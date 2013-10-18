@@ -4,14 +4,22 @@ require 'pullrequest'
 
 module PreReviewer
   ### The class representing the GitHub repository to check the pull
-  ### requests of.  It knows it's @name, @account and can find it's
-  ### @config.  It also can find @selected_pulls given a @pull_state,
+  ### requests of.  It knows it's name, account and can find it's
+  ### config.  It also can find selected_pulls given a pull_state,
   ### which defaults to 'open'.
   class Repository
-    attr_reader :name, :account, :selected_pulls, :config
+    # The name of the repository
+    attr_reader :name
+    # The account for this repository
+    attr_reader :account
+    # The pulls that matched the 'pull state'
+    attr_reader :selected_pulls
+    # The config object
+    attr_reader :config
+    # The pull state, whether 'open', 'closed' or whatevs.
     attr_accessor :pull_state
 
-    # Uses the Request and Singleton Config to find the repository
+    # Uses the +request+ and Singleton Config to find the repository
     # information.
     def initialize( request )
       @request = request

@@ -1,9 +1,20 @@
 module PreReviewer
 
   ### The Criterion represents a single interesting (or uninteresting)
-  ### match.  It has a @specifier, @field, @meaning and @match
+  ### match.  It has a +specifier+, +field+, +meaning+ and +match+
   class Criterion
-    attr_reader :specifier, :field, :meaning, :match, :keyword
+    # Should be :all, :any or :none
+    attr_reader :specifier 
+    # Should be :filename or :patch
+    attr_reader :field
+    # Should be :interesting or :uninteresting
+    attr_reader :meaning
+    # The keyword/regex to match on
+    attr_reader :match
+    # I intend to switch to using the keyword for the human-readable
+    # key, and then either use a 'match on' or 'regexp' attribute to
+    # store how that keyword is matched.
+    attr_reader :keyword
 
     # initialize from the given hash, checks the :match to see if it starts with or ends with a non-word character, in which case it does *not* add a boundary.
     def initialize( input )

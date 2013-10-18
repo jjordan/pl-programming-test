@@ -1,9 +1,14 @@
 module PreReviewer
   ### The Change class represents a single modification in a PullRequest.
   class Change
-    attr_reader :filename, :status, :patch
+    # The file name of the change, like 'lib/foo.rb'
+    attr_reader :filename
+    # The status of the change, not currently used
+    attr_reader :status
+    # The actual changes in the form of a universal diff
+    attr_reader :patch
 
-    # sets the @filename, @status and @patch from the input hash
+    # sets the +filename+, +status+ and +patch+ from the input hash
     def initialize( input )
       raise "input #{input.inspect} is not a hash" unless(input.is_a?( Hash ) )
       @filename = input['filename']

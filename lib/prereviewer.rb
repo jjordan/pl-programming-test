@@ -1,25 +1,29 @@
-# This program takes a github account/reponame on the command line and
-# parses any pull requests looking for "interesting" ones.  It then
-# displays the results.
-#
-# Author::    Jeremiah Jordan (mailto: jjordan@perlreason.com)
-# Copyright:: Copyright (c) 2013 Jeremiah Jordan
-# License::   Distributes under the same terms as Ruby
-
 # This class is the main program logic
-
 require 'config'
 require 'pathname'
 require 'request'
 require 'repository'
 require 'criteria'
 
+# The PreReviewer system is intended to help automate the review
+# process of pull requests on GitHub.
+# It provides a command-line utility 'review' that takes an account/repository name and optional config yaml file and uses the GitHub API to preselect pull requests that look interesting.
+#
+# Author::    Jeremiah Jordan (mailto: jjordan@perlreason.com)
+# Copyright:: Copyright (c) 2013 Jeremiah Jordan
+# License::   MIT or GPL2
 module PreReviewer
+  # Used to find the default config file.
   BASEPATH = Pathname(__FILE__).parent.dirname.realpath
+  # Where in the PreReviewer package it expects to find the default
+  # config fie.  'default/config.yml'
   DEFAULT_CONFIG_PATH =  'default/config.yml'
+  # Where in the user's home directory it expects to find the user's
+  # specific config file. '.prereviewer/config.yml'
   HOMEDIR_CONFIG_PATH = '.prereviewer/config.yml'
   # The class representing the main program.
   class Main
+    # Returns the program help text for the usage.
     attr_reader :usage
     # This method loads the Config object, creates the Request, Repository and Criteria.
     def initialize

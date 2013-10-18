@@ -5,6 +5,7 @@ module PreReviewer
   ### The Criteria class represents a collection of specific Criterions
   class Criteria
     include Enumerable
+    # Returns the Config file.
     attr_reader :config
 
     # load the config

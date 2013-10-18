@@ -8,9 +8,16 @@ module PreReviewer
   ### user.  It knows it's :account, :name, :pull_number and :state
   ### (e.g., 'open', 'closed', etc.)
   class PullRequest 
-    attr_reader :account, :name, :number, :state
+    # The account of the repository
+    attr_reader :account
+    # The name of the repository
+    attr_reader :name
+    # The number of this pull request
+    attr_reader :number 
+    # The state of this pull request, e.g., 'open', 'closed'
+    attr_reader :state
 
-    # Uses the @request, @input and @config to initialize itself.
+    # Uses the +request+, +input+ and config to initialize itself.
     def initialize( request, input )
       @config = PreReviewer::Config.instance
       @request = request
@@ -58,8 +65,8 @@ module PreReviewer
       "#{root}/#{@account}/#{@name}/pull/#{@number} - #{status}"
     end
 
-    # Given a criterion, returns why this pull request was considered
-    # interesting, based on how the criterion matched it.
+    # Given a +criterion+, returns why this pull request was considered
+    # interesting, based on how the Criterion matched it.
     def render_reason( criterion )
       if @interesting
         if criterion.specifier == :none

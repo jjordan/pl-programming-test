@@ -70,7 +70,7 @@ end
 
 desc "remove the generated coverage reports"
 task :clobber_coverage do
-  sh "rm -r coverage/"
+  sh "rm -rf coverage/"
 end
 
 # vim: syntax=ruby
