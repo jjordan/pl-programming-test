@@ -1,7 +1,6 @@
 # -*- ruby -*-
 
 require "rubygems"
-#require "hoe"
 require 'rspec/core/rake_task'
 require 'rdoc'
 require 'rdoc/task'
@@ -10,13 +9,9 @@ require 'find'
 require 'pathname'
 
 BASE = Pathname(__FILE__).dirname.realpath
-
-RSpec::Core::RakeTask.new(:spec) do |config|
-#  config.rcov = true
-end
-
 PKG_VERSION = '0.0.1'
 PKG_FILES = ['Rakefile', 'README.txt', 'README.md', 'History.txt', 'Manifest.txt']
+
 # find package files
 %w{bin lib default spec}.each do |subdir|
   Find.find(BASE + subdir) do |path|
@@ -27,7 +22,13 @@ PKG_FILES = ['Rakefile', 'README.txt', 'README.md', 'History.txt', 'Manifest.txt
   end
 end
 
+RSpec::Core::RakeTask.new(:spec) do |config|
+#  config.rcov = true
+end
+
 task :default => :spec
+desc "remove all generated files"
+task :clean => [:clobber_coverage, :clobber_package, :clobber_rdoc]
 
 # rdoc tasks:
 Rake::RDocTask.new do |rd|
@@ -45,8 +46,8 @@ spec = Gem::Specification.new do |s|
   s.files = PKG_FILES
   s.add_development_dependency 'rspec', '~> 2.0.0', '>= 2.13.0'
   s.add_development_dependency 'simplecov', '~> 0.7.0', '>= 0.7.1'
-  s.add_runtime_dependency 'json', '~> 1.8', '>= 1.8.1'
-  s.add_runtime_dependency 'httparty', '~> 0.12', '>= 0.12.0'
+  s.add_runtime_dependency 'json', '~> 1.8', '>= 1.8.0'
+  s.add_runtime_dependency 'httparty', '~> 0.12', '>= 0.11.0'
   s.authors = ['Jeremiah Jordan']
   s.email = 'jjordan@perlreason.com'
   s.bindir = 'bin'
@@ -62,32 +63,14 @@ spec = Gem::Specification.new do |s|
 EOF
   end
 
-  Gem::PackageTask.new(spec) do |pkg|
-    pkg.need_zip = true
-    pkg.need_tar = true
-  end
+Gem::PackageTask.new(spec) do |pkg|
+  pkg.need_zip = true
+  pkg.need_tar = true
+end
 
-# Hoe.plugin :compiler
-# Hoe.plugin :gem_prelude_sucks
-# Hoe.plugin :inline
-
-# verify coverage
-
-# Hoe.plugin :minitest
-# Hoe.plugin :racc
-# Hoe.plugin :rcov
-# Hoe.plugin :rubyforge
-
-#Hoe.spec "pl-programming-test" do
-  # HEY! If you fill these out in ~/.hoe_template/Rakefile.erb then
-  # you'll never have to touch them again!
-  # (delete this comment too, of course)
-
-  # developer("FIX", "FIX@example.com")
-
-  # self.group_name = "pl-programming-testx" # if part of an organization/group
-
-  # license "MIT" # this should match the license in the README
-#end
+desc "remove the generated coverage reports"
+task :clobber_coverage do
+  sh "rm -r coverage/"
+end
 
 # vim: syntax=ruby

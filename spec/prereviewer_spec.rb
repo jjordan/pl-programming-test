@@ -122,3 +122,13 @@ describe PreReviewer::Main, "run" do
     $stdout = STDOUT
   end
 end
+
+describe PreReviewer::Main, "usage" do
+  it "can return the appropriate usage information" do
+    args = []
+    ARGV.stub( :dup ).and_return(args)
+    pr = PreReviewer::Main.new
+    pr.usage.should == "Usage: #{$0}: ACCOUNT/REPOSITORY [/path/to/config.yml]"
+    pr.has_error?.should == true
+  end
+end

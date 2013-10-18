@@ -14,23 +14,37 @@ require 'request'
 require 'repository'
 require 'criteria'
 
-BASEPATH = Pathname(__FILE__).parent.dirname.realpath
-DEFAULT_CONFIG_PATH =  'default/config.yml'
-HOMEDIR_CONFIG_PATH = '.prereviewer/config.yml'
-
 module PreReviewer
-
+  BASEPATH = Pathname(__FILE__).parent.dirname.realpath
+  DEFAULT_CONFIG_PATH =  'default/config.yml'
+  HOMEDIR_CONFIG_PATH = '.prereviewer/config.yml'
+  # The class representing the main program.
   class Main
-    # This method initializes the program
+    attr_reader :usage
+    # This method loads the Config object, creates the Request, Repository and Criteria.
     def initialize
       args = ARGV.dup
-      @config = initialize_config( args )
-      @request = PreReviewer::Request.new( args )
-      @repo = PreReviewer::Repository.new( @request )
-      @criteria = PreReviewer::Criteria.new
+      @usage = "Usage: #{$0}: ACCOUNT/REPOSITORY [/path/to/config.yml]"
+      if(args.empty?)
+        @error = true
+      else
+        @error = false
+        @config = initialize_config( args )
+        @request = PreReviewer::Request.new( args )
+        @repo = PreReviewer::Repository.new( @request )
+        @criteria = PreReviewer::Criteria.new
+      end
     end
 
-    # This method creates the config object
+    # This method returns whether an error occurred in the initialization.
+    # Yes I know I could just use exceptions.  I will fix that soon.
+    def has_error?
+      @error
+    end
+
+    # This method creates the config object based on an argument on
+    # the command-line, or the default config file location in the
+    # user's homedir or the default config file in the package
     def initialize_config( args )
       homedir = ENV['HOME']
       found_config = args.grep(/\.yml/).first

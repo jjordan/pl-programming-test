@@ -1,6 +1,11 @@
 module PreReviewer
+
+  ### The Criterion represents a single interesting (or uninteresting)
+  ### match.  It has a @specifier, @field, @meaning and @match
   class Criterion
     attr_reader :specifier, :field, :meaning, :match, :keyword
+
+    # initialize from the given hash, checks the :match to see if it starts with or ends with a non-word character, in which case it does *not* add a boundary.
     def initialize( input )
       @specifier = input[:specifier]
       @field = input[:field]
@@ -21,6 +26,9 @@ module PreReviewer
       @applied = false
     end
 
+    # Applies the regexp generated in the @match to the passed in
+    # PullRequest, if there's a match, it sets the pull to
+    # 'interesting' if the criterion's @meaning is 'interesting'
     def apply( pull_request )
       @applied = false
       one_matched = false
@@ -72,9 +80,13 @@ module PreReviewer
       end
     end
 
+    # whether or not this criterion applied to the most recent
+    # PullRequest, but not necessarily whether it was interesting or
+    # uninteresting, since those can vary by the @meaning
     def applied?
       @applied
     end
+
     alias_method :matched?, :applied?
   end
 end

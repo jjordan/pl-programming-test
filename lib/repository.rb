@@ -3,9 +3,16 @@ require 'config'
 require 'pullrequest'
 
 module PreReviewer
+  ### The class representing the GitHub repository to check the pull
+  ### requests of.  It knows it's @name, @account and can find it's
+  ### @config.  It also can find @selected_pulls given a @pull_state,
+  ### which defaults to 'open'.
   class Repository
     attr_reader :name, :account, :selected_pulls, :config
     attr_accessor :pull_state
+
+    # Uses the Request and Singleton Config to find the repository
+    # information.
     def initialize( request )
       @request = request
       @account = request.account
@@ -13,9 +20,13 @@ module PreReviewer
       @pull_state = 'open'
       @pulls = []
       @config = PreReviewer::Config.instance
+      @selected_pulls = []
     end
 
+    # Fetches (and caches) Pull Requests for this repository.  Matches
+    # them against the @pull_state to determine which ones are needed.
     def pulls
+      return @selected_pulls unless( @selected_pulls.empty? )
       fetcher = PreReviewer::Fetcher.new
       api_url = @config.pull_api( @account, @name )
       pulls = fetcher.fetch( api_url )

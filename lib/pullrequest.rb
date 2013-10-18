@@ -4,9 +4,13 @@ require 'json'
 require 'fetcher'
 
 module PreReviewer
+  ### The class representing a single pull request from another GitHub
+  ### user.  It knows it's :account, :name, :pull_number and :state
+  ### (e.g., 'open', 'closed', etc.)
   class PullRequest 
     attr_reader :account, :name, :number, :state
 
+    # Uses the @request, @input and @config to initialize itself.
     def initialize( request, input )
       @config = PreReviewer::Config.instance
       @request = request
@@ -18,14 +22,20 @@ module PreReviewer
       @changes = []
     end
 
+    # Returns whether this pull request has been found to be
+    # interesting (true) or uninteresting (false).
     def is_interesting?
       @interesting
     end
 
+    # Used by other classes (Criterion) to set whether this pull
+    # request is interesting.  Could use some error checking :/
     def is_interesting=( interesting )
       @interesting = interesting
     end
 
+    # Fetches (and caches) the changes for this pull request using the
+    # 'fetcher' class, and returns them.
     def changes
       if(@changes.empty?)
         fetcher = PreReviewer::Fetcher.new
@@ -39,12 +49,17 @@ module PreReviewer
       @changes
     end
 
+    # Returns a string describing whether this specific pull request
+    # was interesting or uninteresting, along wiht the HTML URL for
+    # the pull.
     def render
       status = @interesting ? 'Interesting' : 'Not Interesting'
       root = @config.html_root # should pass @account and @name in here, no?
       "#{root}/#{@account}/#{@name}/pull/#{@number} - #{status}"
     end
 
+    # Given a criterion, returns why this pull request was considered
+    # interesting, based on how the criterion matched it.
     def render_reason( criterion )
       if @interesting
         if criterion.specifier == :none
