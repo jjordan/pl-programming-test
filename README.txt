@@ -1,41 +1,53 @@
 = pl-programming-test
 
-* FIX (url)
+* https://github.com/jjordan/pl-programming-test
 
 == DESCRIPTION:
 
-FIX (describe your package)
+* A little repo for a programming test I'm taking.  It's a program to find the pull requests for a given GitHub repository that match certain criteria, and are labeled as 'interesting' for a human to review them further.
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
+Features:
+* Can have the criteria for interesting/not interesting modified easily in a YAML config file
+* Displays what's interesting along with what match was made
+
+Problems:
+* Not enough error checking
+* No fun command-line switches
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+git clone https://github.com/jjordan/pl-programming-test
+cd pl-programming-test
+./bin/review account/repo [/path/to/config.yml]
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+Ruby: 1.9.2 and 1.9.3, probably previous revs, depending on dependencies.
+
+Rubygems:
+* JSON 1.8
+* HTTParty 0.11
+* Rspec 2
+* simplecov 0.7
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+git clone https://github.com/jjordan/pl-programming-test
+cd pl-programming-test
+rake gem
+sudo gem install pkg/prereviewer-0.0.1.gem
 
 == DEVELOPERS:
 
-After checking out the source, run:
-
-  $ rake newb
-
-This task will install any missing dependencies, run the tests/specs,
-and generate the RDoc.
+Jeremiah Jordan <jjordan at perlreason dot com>
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2013 FIX
+Copyright (c) 2013 Jeremiah Jordan
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
